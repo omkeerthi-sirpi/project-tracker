@@ -84,6 +84,16 @@ export interface ChangeRequest {
   appliedIn?: ID;
 }
 
+/** One entry on the projects dashboard. The project's content lives in its own ProjectData record. */
+export interface ProjectMeta {
+  id: ID;
+  name: string;
+  description?: string;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ProjectData {
   name: string;
   releases: Release[];

@@ -3,9 +3,9 @@ import { createRoot } from 'react-dom/client';
 import '@xyflow/react/dist/style.css';
 import './styles.css';
 import { App } from './App';
-import { loadProject } from './store';
+import { startApp } from './store';
 
-loadProject();
+void startApp();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

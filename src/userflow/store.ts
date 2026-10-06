@@ -95,7 +95,12 @@ export const useFlow = create<FlowState>()((set, get) => ({
 }));
 
 useStore.subscribe((s, prev) => {
-  if (s.data !== prev.data || s.releaseId !== prev.releaseId) useFlow.setState({ index: currentIndex() });
+  if (s.projectId !== prev.projectId) {
+    // A different project: start from a clean map.
+    useFlow.setState({ index: currentIndex(), expanded: {}, selected: null, query: '', filters: allFilters(), centerOn: null });
+  } else if (s.data !== prev.data || s.releaseId !== prev.releaseId) {
+    useFlow.setState({ index: currentIndex() });
+  }
 });
 
 /** Switch to the User flow tab and jump to an item (persona, workflow, screen or notification id). */

@@ -6,7 +6,7 @@ import { changesForRelease, makeCtx, notifAt, screenAt, spanAt } from '../lib/de
 import { fmtDate, plural } from '../lib/util';
 import { ScreenImage } from './ScreenImage';
 import { openInFlow } from '../userflow/store';
-import { ChangeRequestForm, NotificationChangeForm, ScreenForm, VersionForm, WorkflowForm } from './Forms';
+import { ChangeRequestForm, NotificationChangeForm, PersonaForm, ScreenForm, VersionForm, WorkflowForm } from './Forms';
 
 /** Where an inbox CR can be dropped. */
 type Target = { kind: 'screen'; screen: Screen } | { kind: 'notif'; notif: NotificationItem } | { kind: 'new-screen'; workflowId: ID };
@@ -107,7 +107,17 @@ export function BoardView() {
     },
   });
 
-  if (!persona) return <div className="board"><div className="empty" style={{ margin: 40 }}>Add a persona to start.</div></div>;
+  if (!persona)
+    return (
+      <div className="board">
+        <div className="bd-start">
+          <h2>Start with a persona</h2>
+          <p className="muted">A persona is a type of user (for example "Org Admin"). Each persona gets its own workflows, screens and notifications.</p>
+          <button className="btn primary" onClick={() => setModal(<PersonaForm onClose={close} />)}><Plus size={14} /> Add persona</button>
+        </div>
+        {modal}
+      </div>
+    );
 
   const stats = {
     screens: columns.reduce((n, col) => n + col.screens.length, 0),
@@ -241,6 +251,10 @@ export function BoardView() {
               </button>
             );
           })}
+          <button className="bd-avatar add" onClick={(e) => { e.stopPropagation(); setModal(<PersonaForm onClose={close} />); }} title="Add persona">
+            <span className="bd-avatar-circle"><Plus size={16} /></span>
+            <span className="bd-avatar-name">Persona</span>
+          </button>
         </div>
 
         <div className="bd-hero" style={{ '--c': persona.color } as CSSProperties}>

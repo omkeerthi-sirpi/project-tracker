@@ -1,20 +1,23 @@
 import { useState } from 'react';
-import { Network, GitBranch, History, LayoutGrid, Plus } from 'lucide-react';
-import { useStore } from '../store';
+import { ChevronLeft, Network, History, LayoutGrid, Plus } from 'lucide-react';
+import { goToDashboard, useStore } from '../store';
 import { changesForRelease } from '../lib/derive';
 import { ReleaseForm } from './Forms';
+import { initials } from './Dashboard';
 
 export function TopBar() {
-  const { data, releaseId, view, patch, select } = useStore();
+  const { data, releaseId, view, patch, select, projectId, projects } = useStore();
+  const project = projects.find((p) => p.id === projectId);
   const [modal, setModal] = useState(false);
 
   return (
     <header className="topbar">
-      <button className="brand" onClick={() => select({ kind: 'root', id: 'root' })}>
-        <span className="brand-icon"><GitBranch size={18} /></span>
+      <button className="back-btn" onClick={goToDashboard} title="All projects"><ChevronLeft size={16} /> Projects</button>
+      <button className="brand" onClick={() => select({ kind: 'root', id: 'root' })} title="Project overview">
+        <span className="brand-icon project" style={{ background: project?.color }}>{project && initials(project.name)}</span>
         <span>
-          <strong>CMP Flow Tracker</strong>
-          <small>Personas · workflows · screens · notifications</small>
+          <strong>{project?.name}</strong>
+          <small>{project?.description ?? 'Personas · workflows · screens · notifications'}</small>
         </span>
       </button>
 
